@@ -50,6 +50,8 @@ jobs:
             npm i
             npm run test
 
+
+
   test-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -61,7 +63,10 @@ jobs:
           name: test-backend
           command: |
             cd backend
-            npm audit --audit-level=critical --prefix backend
+            npm i
+            npm run test
+
+
 
   scan-frontend:
     docker:
@@ -74,7 +79,9 @@ jobs:
           name: Front-end scan
           command: |
             cd frontend          
-            npm audit --audit-level=critical --prefix frontend
+            npm audit fix --audit-level=critical --force
+            # If the "npm audit fix" command above could not fix all critical vulnerabilities, try “npm audit fix --force” again
+            npm audit --audit-level=critical
 
 
   scan-backend:
@@ -88,9 +95,9 @@ jobs:
           name: Back-end scan
           command: |
             cd backend
-            npm install
+            npm audit fix --audit-level=critical --force
+            # If the "npm audit fix" command above could not fix all critical vulnerabilities, try “npm audit fix --force” again
             npm audit --audit-level=critical
-            npm audit fix --audit-level=critical
 
 
 
