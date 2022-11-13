@@ -80,8 +80,7 @@ jobs:
           command: |
             cd frontend          
             sudo npm install
-            npm audit fix --force --audit-level=critical
-            npm audit fix --force --audit-level=critical
+            npm audit fix --force 
             npm audit --audit-level=critical
 
 
@@ -97,8 +96,7 @@ jobs:
           command: |
             cd backend
             sudo npm install
-            npm audit fix --force --audit-level=critical
-            npm audit fix --force --audit-level=critical
+            npm audit fix --force
             npm audit --audit-level=critical
 
 
