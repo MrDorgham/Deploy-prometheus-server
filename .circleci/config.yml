@@ -163,7 +163,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: cimg/python:3.10
         environment:
           NODE_ENV: "local"
           VERSION: "1"
@@ -198,7 +198,7 @@ jobs:
             cat ~/project/.circleci/ansible/inventory.txt
             export ANSIBLE_HOST_KEY_CHECKING=False
             ansible-playbook -i ~/project/.circleci/ansible/inventory.txt \
-             ~/project/.circleci/ansible/configure-server.yml
+            ~/project/.circleci/ansible/configure-server.yml
            
       # rollback on failure
       - destroy-environment:
