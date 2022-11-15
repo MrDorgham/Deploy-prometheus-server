@@ -226,17 +226,12 @@ jobs:
            npm run migrations > migrations_dump.txt 
 
       - run:
-          name: Send migrations results to memstash
+          name: Send migration results to kvdb
           command: |
-            echo "has been done successfully" > ./migration_status.txt
-            pwd && ls -al
-            if grep -q "has been done successfully" ./migration_status.txt 
-            then 
-              echo "has been done successfully"
-              curl -H "Content-Type: text/plain" -H "token: ecdfc255-81e1-4056-9efa-2d7fa10812e1" --request PUT --data "1" https://api.memstash.io/values/migrations-${CIRCLE_WORKFLOW_ID:0:7}
-            else
-              echo "has failed"
-              curl -H "Content-Type: text/plain" -H "token: ecdfc255-81e1-4056-9efa-2d7fa10812e1" --request PUT --data "0" https://api.memstash.io/values/migrations-${CIRCLE_WORKFLOW_ID:0:7}
+            echo "has been done successfully" > ./migrations_dump.txt
+            if grep -q "success" ~/project/backend/migrations_dump.txt
+            then
+              curl --insecure https://kvdb.io/ViWzkdySLpmD9TMMzU5Fzq/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
             fi
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
