@@ -360,6 +360,7 @@ jobs:
             node --version
             npm --version
             pm2 --version
+            
 
 
       - destroy-environment:
@@ -407,6 +408,7 @@ jobs:
       - run:
           name: Backend smoke test
           command: |
+            pm2 logs
             # export BACKEND_IP=$(tail ~/project/.circleci/ansible/inventory.txt)
             export BACKEND_IP=$(aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
