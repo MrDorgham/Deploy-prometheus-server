@@ -250,7 +250,6 @@ jobs:
             then
               curl --insecure https://kvdb.io/ViWzkdySLpmD9TMMzU5Fzq/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
             fi
-      # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
@@ -310,6 +309,16 @@ jobs:
   deploy-backend:
     docker:
       - image: cimg/node:13.8.0
+        environment:
+          TYPEORM_CONNECTION: $TYPEORM_CONNECTION
+          TYPEORM_HOST: $TYPEORM_HOST
+          TYPEORM_USERNAME: $TYPEORM_USERNAME
+          TYPEORM_PASSWORD: $TYPEORM_PASSWORD
+          TYPEORM_DATABASE: $TYPEORM_DATABASE
+          TYPEORM_PORT: $TYPEORM_PORT
+          TYPEORM_ENTITIES: $TYPEORM_ENTITIES      
+
+
     steps:
       - checkout
       - add_ssh_keys:
@@ -336,8 +345,6 @@ jobs:
           command: |
             sudo npm i -g pm2
 
-
-            
       - restore_cache:
           keys: [backend-build]
       - attach_workspace:
@@ -386,6 +393,10 @@ jobs:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip -qq awscliv2.zip
             sudo ./aws/install
+      - run:
+          name: Install pm2
+          command: |
+            sudo npm i -g pm2
 
       - restore_cache:
           keys: [backend-build]
@@ -423,10 +434,6 @@ jobs:
                 exit 1
             fi
 
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-      - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
 
 
