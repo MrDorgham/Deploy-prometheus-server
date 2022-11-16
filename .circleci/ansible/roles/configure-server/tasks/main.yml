@@ -34,3 +34,11 @@
     global: yes
     production: yes
     state: present
+    
+- name: install pm2 # sudo npm install pm2 -g
+  become: yes
+  npm:
+    name: pm2
+    global: yes
+    state: latest
+    production: yes
