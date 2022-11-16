@@ -331,7 +331,14 @@ jobs:
             sudo apt install software-properties-common -y
             sudo add-apt-repository --yes --update ppa:ansible/ansible
             sudo apt install ansible -y
+      - run:
+          name: Install pm2
+          command: |
+            sudo npm i -g pm2
+            pm2 start app.js
 
+
+            
       - restore_cache:
           keys: [backend-build]
       - attach_workspace:
