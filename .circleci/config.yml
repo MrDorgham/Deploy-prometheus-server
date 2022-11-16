@@ -351,6 +351,11 @@ jobs:
             echo "Contents of the inventory.txt file is ------$(cat inventory.txt)"
             export ANSIBLE_HOST_KEY_CHECKING=False
             ansible-playbook -i inventory.txt deploy-backend.yml
+            node --version
+            npm --version
+            pm2 --version
+
+
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations:
@@ -360,18 +365,7 @@ jobs:
  
   smoke-test:
     docker:
-      - image: cimg/node:13.8.0
-        environment:
-          NODE_ENV: "local"
-          VERSION: "1"
-          ENVIRONMENT: "production"
-          TYPEORM_CONNECTION: $TYPEORM_CONNECTION
-          TYPEORM_HOST: $TYPEORM_HOST
-          TYPEORM_USERNAME: $TYPEORM_USERNAME
-          TYPEORM_PASSWORD: $TYPEORM_PASSWORD
-          TYPEORM_DATABASE: $TYPEORM_DATABASE
-          TYPEORM_PORT: $TYPEORM_PORT
-          TYPEORM_ENTITIES: $TYPEORM_ENTITIES       
+      - image: cimg/node:13.8.0 
     steps:
       - checkout
       - add_ssh_keys:
@@ -385,6 +379,12 @@ jobs:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip -qq awscliv2.zip
             sudo ./aws/install
+
+      - restore_cache:
+          keys: [backend-build]
+
+      - attach_workspace:
+          at: ~/
 
       - run:
           name: Frontend smoke test.
