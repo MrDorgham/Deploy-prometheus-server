@@ -1,7 +1,5 @@
 version: 2.1
 
-
-
 parameters:
   workflow_id:
     type: string
@@ -9,6 +7,8 @@ parameters:
 
 
 
+
+jobs:
   deploy-infrastructure:
     docker:
       - image: amazon/aws-cli
